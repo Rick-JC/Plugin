@@ -15,3 +15,12 @@ add_filter( 'incompatible_sql_modes', function( $incompatible_modes ) {
     return $incompatible_modes;
 } );
 $GLOBALS['wpdb']->set_sql_mode();
+
+if(!function_exists('is_ssl') || !is_ssl()) {
+    foreach (['HTTP_CF_VISITOR', 'HTTP_X_FORWARDED_PROTO'] as $sKey) {
+        if (isset($_SERVER[$sKey]) && (strpos($_SERVER[ $sKey ], 'https') !== false )) {
+            $_SERVER['HTTPS'] = 'on';
+            break;
+        }
+    }
+}
